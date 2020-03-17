@@ -34,6 +34,8 @@ public class Member {
   @Lob
   private String description;
 
+  public Member(){}
+
   public Member(String username) {
     this.username = username;
   }
