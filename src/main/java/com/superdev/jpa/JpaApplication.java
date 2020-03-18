@@ -16,11 +16,19 @@ public class JpaApplication {
 		try {
 			tx.begin();
 
-			Team team = em.find(Team.class, 1L);
-			List<Member> members = team.getMembers(); // 객체 그래프 탐색
-			members.forEach(member -> {
-				System.out.println("member.username = " + member.getUsername());
-			});
+			Team team1 = new Team("팀1");
+			em.persist(team1);
+
+			Member member1 = new Member("회원1");
+			member1.setTeam(team1);
+			team1.getMembers().add(member1);
+			em.persist(member1);
+
+			Member member2 = new Member("회원2");
+			member2.setTeam(team1);
+			team1.getMembers().add(member2);
+			em.persist(member2);
+
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
