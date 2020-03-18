@@ -14,14 +14,22 @@ public class JpaApplication {
 		EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
 
 		try {
+			tx.begin();
 
+			Team team2 = new Team("팀2");
+			em.persist(team2);
 
-			String jpql = "select m from Member m join m.team t where t.name =:teamName";
-			List<Member> resultList = em.createQuery(jpql, Member.class).setParameter("teamName", "팀1").getResultList();
-			resultList.forEach(member -> {
-				System.out.println("[query] member.username=" + member.getUsername());
-			});
+			Member member = em.find(Member.class, 1L);
+			member.setTeam(team2);
 
+			// 연관 관계 제거
+			Member member2 = em.find(Member.class, 2L);
+			member.setTeam(null);
+
+			member.setTeam(null);
+			member2.setTeam(null);
+			em.remove(team2);
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			tx.rollback(); //트랜잭션 롤백
